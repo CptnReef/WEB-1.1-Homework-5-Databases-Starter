@@ -26,6 +26,7 @@ def plants_list():
     context = {
         'plants': plants_data,
     }
+
     return render_template('plants_list.html', **context)
 
 @app.route('/about')
@@ -49,7 +50,7 @@ def create():
         # TODO: Make an `insert_one` database call to insert the object into the
         # database's `plants` collection, and get its inserted id. Pass the 
         # inserted id into the redirect call below.
-        insert_results = mongo.db.plants.insert_one(new_plant)
+        insert_results = mongo.db.insert_one(new_plant)
 
         return redirect(url_for('detail', plant_id=insert_results.inserted_id))
 
@@ -62,7 +63,7 @@ def detail(plant_id):
 
     # TODO: Replace the following line with a database call to retrieve *one*
     # plant from the database, whose id matches the id passed in via the URL.
-    plant_to_show = ''
+    plant_to_show = mongo.db.plants.find_one({'_id':ObjectId(plant_id)})
 
     # TODO: Use the `find` database operation to find all harvests for the
     # plant's id.
